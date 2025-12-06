@@ -1,5 +1,4 @@
 //cadastro
-
 //fabriciotrindade2001_db_user    zBK02XfVHRMdlmX8
 
 const express = require("express")
@@ -7,45 +6,71 @@ const app = express()
 
 app.use(express.json())
 
-let usuarios = []
-let id = 1
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
 
 //rota front end acessa
-app.post('/usuarios', (request, response) =>{
+
+//CREATE USER
+app.post('/usuarios', async (request, response) =>{ //funcao assincrona
     
     const {name, email, telefone} = request.body
 
-    const user = {
-        id: id++,
-        name: name,
-        email: email,
-        telefone: telefone,
-        criadoEm: new Date()
-    }
-    
-    
-    usuarios.push(user)
+    const user = await prisma.user.create({
+        data: {
+            name,
+            email,
+            telefone
+        }
+    })
 
     return response.status(200).send(user)
 })
-    
-    app.get('/usuarios', (request, response) => {
-        return response.status(200).send(usuarios)
+
+//READ ALL
+    app.get('/usuarios', async (request, response) => {
+
+        const users = await prisma.user.findMany()
+
+        return response.status(200).send(users)
     })
-    
-    app.get('/buscar/usuario/:id', (request, response) => {
+
+//READ ID
+    app.get('/buscar/usuario/:id', async (request, response) => {
 
         const id = request.params.id
 
-        const indexUsuario = usuarios.find(usuario => usuario.id == id)
+        const users = await prisma.user.findUnique({
+            where: {id}
+        })
 
-        if(!indexUsuario){
-            return response.status(404).send({message:"Usuário não encontrado"})
-        }
-
-        return response.status(200).send(indexUsuario)
+        return response.status(200).send(users)
     })
 
+//UPDATE USER
+    app.put('/editar/usuario/:id', async ( request, response) => {
+
+        const id = request.params.id
+        const { name, telefone, email } = request.body
+
+        const userUpdate = await prisma.user.update({
+            where: {id},
+            data: {name, telefone, email}
+        })
+
+        return response.status(200).send(userUpdate)
+    })
+
+//DELETE USER
+    app.delete('/usuarios/deletar/:id', async ( request, response) =>{
+        const id = request.params.id
+
+        const userDeleted = await prisma.user.delete({
+            where: {id}
+        })
+        
+        return response.status(200).send(userDeleted)
+    })
 
 app.listen(3333, () => {
     console.log("Server running")
