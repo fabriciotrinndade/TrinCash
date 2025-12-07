@@ -1,5 +1,4 @@
 //cadastro
-//fabriciotrindade2001_db_user    zBK02XfVHRMdlmX8
 
 const express = require("express")
 const app = express()
