@@ -27,3 +27,6 @@ Em construção. Estrutura e funcionalidades podem mudar.
 - Melhorias visuais e de navegação  
 - Camada de autorização ampliada
 
+## Preview
+
+![Screenshot do Login](private/login.png)
