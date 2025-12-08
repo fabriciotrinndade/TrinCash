@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Registro</title>
+    <link rel="icon" href="./img/icon.png">
+    <link rel="stylesheet" href="./style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<div class="formulario">
+
+    <img class="logo" src="./img/trincashLogo.png">
+
+     <h1>Cadastro</h1>
+
+    <form action="/registrar" method="POST">
+
+        <div class="boxFormulario">
+            <input name="email" type="email" placeholder="Email" required><i class='bx bxs-envelope' ></i>
+        </div>
+
+        <div class="boxFormulario">
+            <input name="password" type="password" placeholder="Senha" required><i class='bx bxs-lock-alt' ></i>
+        </div>
+
+        <!--
+        <div class="boxLembrar">
+        <label><input type="checkbox">Lembrar</label>
+        </div>
+        -->
+
+        <button type="submit">Registrar</button>
+
+        <div class="linkRegistro">
+        <p>Já tem uma conta? <a id="loginFormulario" href="login.html">Logar</a></p>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>

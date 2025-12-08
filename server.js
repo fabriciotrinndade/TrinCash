@@ -1,6 +1,7 @@
-//cadastro
+require('dotenv').config()
+const express = require('express')
+const jwt = require('jsonwebtoken')
 
-const express = require("express")
 const app = express()
 
 app.use(express.json())
@@ -8,23 +9,83 @@ app.use(express.json())
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
-//rota front end acessa
+const path = require('path');
+const { request } = require('http')
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static('public'));
+
+//AUTH autenticação
+function authToken(request, response, next) {
+    const authHeader = request.headers['authorization']
+
+    const token = authHeader?.split(' ')[1]
+
+    if (!token) return response.sendStatus(401)
+
+        jwt.verify(token, process.env.JWT_SECRET, (err, user) =>{
+            if (err) return response.sendStatus(401)
+                request.user = user
+            next()
+        })
+}
+    
+
+//LOGIN INICIO
+app.get('/', (request, response) => {
+    response.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
 
 //CREATE USER
-app.post('/usuarios', async (request, response) =>{ //funcao assincrona
+app.post('/registrar', async (request, response) =>{ //funcao assincrona
     
-    const {name, email, telefone} = request.body
+    const {email, password} = request.body
+
+    const verificaUser = await prisma.user.findFirst({
+        where: {email}
+    })
+
+    if (verificaUser) {
+        return response.status(400).send("Email já cadastrado")
+    }
 
     const user = await prisma.user.create({
         data: {
-            name,
             email,
-            telefone
+            password
         }
     })
 
-    return response.status(200).send(user)
+    return response.redirect('/login.html')
 })
+
+//LOGIN
+app.post('/login', async ( request, response) =>{
+
+    const { email, password} = request.body
+
+     const users = await prisma.user.findFirst({
+            where: {email, password}
+        })
+
+        if (!users) {
+            return response.status(404).send("Credenciais inválidas")
+        } 
+
+            const token = jwt.sign({ id: users.id },process.env.JWT_SECRET, { expiresIn: '1h'})
+            response.json({token})
+       
+})
+
+
+app.get('/dashboard', authToken, ( request, response) =>{
+    response.sendFile(path.join(__dirname,'private', 'dashboard.html'))
+})
+
+
+
+
 
 //READ ALL
     app.get('/usuarios', async (request, response) => {
@@ -50,11 +111,11 @@ app.post('/usuarios', async (request, response) =>{ //funcao assincrona
     app.put('/editar/usuario/:id', async ( request, response) => {
 
         const id = request.params.id
-        const { name, telefone, email } = request.body
+        const { email, password } = request.body
 
         const userUpdate = await prisma.user.update({
             where: {id},
-            data: {name, telefone, email}
+            data: {email, password}
         })
 
         return response.status(200).send(userUpdate)
@@ -70,6 +131,7 @@ app.post('/usuarios', async (request, response) =>{ //funcao assincrona
         
         return response.status(200).send(userDeleted)
     })
+
 
 app.listen(3333, () => {
     console.log("Server running")
