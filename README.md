@@ -1,32 +1,48 @@
 # TrinCash
 
-Aplicação web para controle financeiro pessoal. Projeto em desenvolvimento.
+Personal finance tracking web application focused on core backend fundamentals and clean project structure.  
+Work in progress.
 
 ## Status
-Em construção. Estrutura e funcionalidades podem mudar.
+In development. Architecture and features may evolve.
 
-## Tecnologias
+## Tech Stack
+
+### Backend
 - Node.js  
 - Express  
 - MongoDB  
 - Prisma  
+
+### Frontend
 - HTML  
 - CSS  
-- JavaScript
+- JavaScript  
 
-## Funcionalidades Atuais
-- Autenticação básica  
-- Sessões no servidor  
-- Proteção de rotas  
-- Estrutura inicial de interface
+## Current Features
+- User authentication (email/password)  
+- Password hashing  
+- Server-side sessions  
+- Authentication middleware  
+- Protected routes  
+- Initial UI structure  
 
-## Funcionalidades Futuras
-- Painel financeiro completo  
-- Cadastro e gerenciamento de transações  
-- Relatórios e análises  
-- Melhorias visuais e de navegação  
-- Camada de autorização ampliada
+## Planned Features
+- Financial dashboard  
+- Transaction management (income/expense)  
+- Categories and budgets  
+- Reports and analytics  
+- Role-based authorization  
+- UI/UX improvements  
+
+## Key Concepts Applied
+- RESTful API principles  
+- MVC-style organization  
+- Middleware-based authentication  
+- Session management  
+- Input validation  
+- Basic security practices  
 
 ## Preview
 
-![Screenshot do Login](private/login.png)
+![Screenshot](private/login.png)
